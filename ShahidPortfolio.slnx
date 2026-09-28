@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ShahidPortfolio.API/ShahidPortfolio.API.csproj" />
+    <Project Path="src/ShahidPortfolio.Application/ShahidPortfolio.Application.csproj" />
+    <Project Path="src/ShahidPortfolio.Domain/ShahidPortfolio.Domain.csproj" />
+    <Project Path="src/ShahidPortfolio.Infrastructure/ShahidPortfolio.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ShahidPortfolio.Tests/ShahidPortfolio.Tests.csproj" />
+  </Folder>
+</Solution>
