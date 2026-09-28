@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShahidPortfolio.Application.Common.Interfaces;
 using ShahidPortfolio.Infrastructure.Persistence;
+using ShahidPortfolio.Infrastructure.Security;
 
 namespace ShahidPortfolio.Infrastructure;
 
@@ -21,6 +22,8 @@ public static class DependencyInjection
             provider.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<IEmailService, Services.EmailService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         return services;
     }

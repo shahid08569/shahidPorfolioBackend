@@ -1,13 +1,24 @@
 using System.Security.Cryptography;
+using ShahidPortfolio.Application.Common.Interfaces;
 
 namespace ShahidPortfolio.Infrastructure.Security;
 
-public static class PasswordHasher
+public class PasswordHasher : IPasswordHasher
 {
     private const int SaltSize = 16;
     private const int HashSize = 32;
     private const int Iterations = 100_000;
     private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA512;
+
+    void IPasswordHasher.CreatePasswordHash(string password, out string hash, out string salt)
+    {
+        CreatePasswordHash(password, out hash, out salt);
+    }
+
+    bool IPasswordHasher.VerifyPassword(string password, string storedHash, string storedSalt)
+    {
+        return VerifyPassword(password, storedHash, storedSalt);
+    }
 
     public static void CreatePasswordHash(string password, out string hash, out string salt)
     {
