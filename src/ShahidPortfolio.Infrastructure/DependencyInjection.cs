@@ -20,6 +20,8 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
 
+        services.AddScoped<IEmailService, Services.EmailService>();
+
         return services;
     }
 }
