@@ -109,4 +109,22 @@ public class MediaController : BaseApiController
 
         return Ok(ApiResponse<string>.Ok(relativeUrl, "CV uploaded and site settings updated successfully."));
     }
+
+    [HttpGet("cv")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status404NotFound)]
+    public IActionResult DownloadCv()
+    {
+        var webRoot = _environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+        var filePath = Path.Combine(webRoot, "uploads", "Shahid_Hussain_CV.pdf");
+
+        if (!System.IO.File.Exists(filePath))
+        {
+            return NotFound(ApiResponse<string>.Fail("CV file has not been uploaded yet."));
+        }
+
+        var stream = System.IO.File.OpenRead(filePath);
+        return File(stream, "application/pdf", "Shahid_Hussain_CV.pdf", enableRangeProcessing: true);
+    }
 }
