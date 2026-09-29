@@ -53,10 +53,29 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("DefaultCorsPolicy", policy =>
     {
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrWhiteSpace(origin)) return false;
+
+            if (builder.Environment.IsDevelopment())
+            {
+                // In Development, allow any localhost or 127.0.0.1 port (Angular CLI, dynamic preview ports, etc.)
+                if (Uri.TryCreate(origin, UriKind.Absolute, out var uri))
+                {
+                    if (uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) 
+                        || uri.Host.Equals("127.0.0.1", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // In Production, match configured allowed origins
+            return allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase);
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
