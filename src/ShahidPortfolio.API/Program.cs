@@ -131,7 +131,10 @@ var app = builder.Build();
 // 6. Global Exception Middleware
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
-// 7. Static files (for wwwroot/uploads: CV and uploaded images)
+// 7. Configure CORS (Before StaticFiles and Routing)
+app.UseCors("DefaultCorsPolicy");
+
+// 8. Static files (for wwwroot/uploads: CV and uploaded images)
 var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "uploads");
 if (!Directory.Exists(uploadsPath))
 {
@@ -168,8 +171,6 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shahid Portfolio API v1");
     });
 }
-
-app.UseCors("DefaultCorsPolicy");
 
 app.UseRateLimiter();
 

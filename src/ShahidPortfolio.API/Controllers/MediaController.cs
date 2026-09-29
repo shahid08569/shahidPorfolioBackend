@@ -27,7 +27,7 @@ public class MediaController : BaseApiController
     [Consumes("multipart/form-data")]
     [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
+    public async Task<IActionResult> UploadFile([FromForm] IFormFile file, CancellationToken cancellationToken)
     {
         if (file == null || file.Length == 0)
         {
@@ -69,7 +69,7 @@ public class MediaController : BaseApiController
     [Consumes("multipart/form-data")]
     [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UploadCv(IFormFile file, CancellationToken cancellationToken)
+    public async Task<IActionResult> UploadCv([FromForm] IFormFile file, CancellationToken cancellationToken)
     {
         if (file == null || file.Length == 0)
         {

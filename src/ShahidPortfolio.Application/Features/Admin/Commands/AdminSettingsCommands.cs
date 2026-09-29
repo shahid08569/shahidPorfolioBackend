@@ -19,7 +19,7 @@ public record UpdateSiteSettingsCommand(
     string HeroCodeTitle,
     string HeroCodeSnippet,
     string HeroBadgesJson,
-    List<SocialLinkInputDto> SocialLinks
+    List<SocialLinkInputDto>? SocialLinks = null
 ) : IRequest<ApiResponse<bool>>;
 
 public class SocialLinkInputDto
@@ -60,21 +60,24 @@ public class UpdateSiteSettingsCommandHandler : IRequestHandler<UpdateSiteSettin
         settings.HeroCodeSnippet = request.HeroCodeSnippet ?? string.Empty;
         settings.HeroBadgesJson = string.IsNullOrWhiteSpace(request.HeroBadgesJson) ? "[]" : request.HeroBadgesJson;
 
-        // Update social links
-        var existingSocials = await _context.SocialLinks.ToListAsync(cancellationToken);
-        _context.SocialLinks.RemoveRange(existingSocials);
-
-        if (request.SocialLinks != null && request.SocialLinks.Count > 0)
+        // Update social links if provided
+        if (request.SocialLinks != null)
         {
-            var newSocials = request.SocialLinks.Select(s => new SocialLink
+            var existingSocials = await _context.SocialLinks.ToListAsync(cancellationToken);
+            _context.SocialLinks.RemoveRange(existingSocials);
+
+            if (request.SocialLinks.Count > 0)
             {
-                Platform = s.Platform,
-                Url = s.Url,
-                IconKey = s.IconKey,
-                DisplayOrder = s.DisplayOrder,
-                IsActive = true
-            });
-            await _context.SocialLinks.AddRangeAsync(newSocials, cancellationToken);
+                var newSocials = request.SocialLinks.Select(s => new SocialLink
+                {
+                    Platform = s.Platform ?? string.Empty,
+                    Url = s.Url ?? string.Empty,
+                    IconKey = s.IconKey ?? string.Empty,
+                    DisplayOrder = s.DisplayOrder,
+                    IsActive = true
+                });
+                await _context.SocialLinks.AddRangeAsync(newSocials, cancellationToken);
+            }
         }
 
         await _context.SaveChangesAsync(cancellationToken);
