@@ -26,8 +26,9 @@ public static class DatabaseSeeder
             await context.AdminUsers.AddAsync(admin);
         }
 
-        // 2. Seed Site Settings
-        if (!await context.SiteSettings.AnyAsync())
+        // 2. Seed / Update Site Settings
+        var existingSettings = await context.SiteSettings.FirstOrDefaultAsync();
+        if (existingSettings == null)
         {
             var settings = new SiteSettings
             {
@@ -38,10 +39,58 @@ public static class DatabaseSeeder
                 AvailabilityStatus = "Open to full-time engineering roles",
                 CurrentLocation = "Pakistan",
                 CvUrl = "/uploads/Shahid_Hussain_CV.pdf",
+                WhatsAppNumber = "923000000000",
+                HeroCodeTitle = "ShahidPortfolio.sln - Clean Architecture",
+                HeroCodeSnippet = @"public class SolutionArchitect
+{
+    public string Name => ""Shahid Hussain"";
+    public string[] CoreStack => new[]
+    {
+        "".NET 10 / C#"",
+        ""ASP.NET Core Web API"",
+        ""Clean Architecture & CQRS"",
+        ""Angular 22 (SSR)"",
+        ""SQL Server & EF Core""
+    };
+    public bool DeliverCleanCode() => true;
+}",
+                HeroBadgesJson = @"[""Clean Architecture"", ""CQRS / MediatR"", ""Angular 22 Signals""]",
                 UpdatedAtUtc = DateTime.UtcNow
             };
 
             await context.SiteSettings.AddAsync(settings);
+        }
+        else
+        {
+            // Backfill new fields if missing
+            if (string.IsNullOrWhiteSpace(existingSettings.WhatsAppNumber))
+            {
+                existingSettings.WhatsAppNumber = "923000000000";
+            }
+            if (string.IsNullOrWhiteSpace(existingSettings.HeroCodeTitle))
+            {
+                existingSettings.HeroCodeTitle = "ShahidPortfolio.sln - Clean Architecture";
+            }
+            if (string.IsNullOrWhiteSpace(existingSettings.HeroCodeSnippet))
+            {
+                existingSettings.HeroCodeSnippet = @"public class SolutionArchitect
+{
+    public string Name => ""Shahid Hussain"";
+    public string[] CoreStack => new[]
+    {
+        "".NET 10 / C#"",
+        ""ASP.NET Core Web API"",
+        ""Clean Architecture & CQRS"",
+        ""Angular 22 (SSR)"",
+        ""SQL Server & EF Core""
+    };
+    public bool DeliverCleanCode() => true;
+}";
+            }
+            if (string.IsNullOrWhiteSpace(existingSettings.HeroBadgesJson))
+            {
+                existingSettings.HeroBadgesJson = @"[""Clean Architecture"", ""CQRS / MediatR"", ""Angular 22 Signals""]";
+            }
         }
 
         // 3. Seed Skills
@@ -117,6 +166,72 @@ public static class DatabaseSeeder
             };
 
             await context.Projects.AddAsync(project);
+        }
+
+        // 6. Seed Endorsements / Testimonials
+        if (!await context.Testimonials.AnyAsync())
+        {
+            var testimonials = new List<Testimonial>
+            {
+                new()
+                {
+                    ClientName = "Alex Mercer",
+                    Role = "VP of Engineering",
+                    Company = "CloudScale Systems",
+                    Content = "Shahid's architectural vision for our ASP.NET Core services brought unprecedented reliability. His adherence to Clean Architecture, CQRS, and automated testing ensured smooth releases without regressions.",
+                    Rating = 5,
+                    Relationship = "Client / Engineering Partner",
+                    IsApproved = true,
+                    IsActive = true,
+                    DisplayOrder = 1,
+                    SubmittedAtUtc = DateTime.UtcNow.AddDays(-20)
+                },
+                new()
+                {
+                    ClientName = "Sarah Jenkins",
+                    Role = "Principal Technical Lead",
+                    Company = "FinTech Solutions",
+                    Content = "Working alongside Shahid was a pleasure. He spearheaded our migration to Angular standalone components and Signals, dramatically reducing bundle size and improving developer ergonomics.",
+                    Rating = 5,
+                    Relationship = "Tech Lead Colleague",
+                    IsApproved = true,
+                    IsActive = true,
+                    DisplayOrder = 2,
+                    SubmittedAtUtc = DateTime.UtcNow.AddDays(-10)
+                }
+            };
+
+            await context.Testimonials.AddRangeAsync(testimonials);
+        }
+
+        // 7. Seed Certificates
+        if (!await context.Certificates.AnyAsync())
+        {
+            var certificates = new List<Certificate>
+            {
+                new()
+                {
+                    Title = "Microsoft Certified: Azure Developer Associate",
+                    IssuingOrganization = "Microsoft",
+                    IssueDate = new DateTime(2025, 6, 15),
+                    CredentialId = "AZ-204-98421",
+                    CredentialUrl = "https://learn.microsoft.com",
+                    DisplayOrder = 1,
+                    IsActive = true
+                },
+                new()
+                {
+                    Title = "Enterprise Clean Architecture with .NET & C#",
+                    IssuingOrganization = "Dometrain",
+                    IssueDate = new DateTime(2025, 11, 20),
+                    CredentialId = "DT-CA-2025-081",
+                    CredentialUrl = "https://dometrain.com",
+                    DisplayOrder = 2,
+                    IsActive = true
+                }
+            };
+
+            await context.Certificates.AddRangeAsync(certificates);
         }
 
         await context.SaveChangesAsync();

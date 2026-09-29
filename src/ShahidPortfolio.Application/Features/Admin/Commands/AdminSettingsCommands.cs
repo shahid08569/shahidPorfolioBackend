@@ -15,6 +15,10 @@ public record UpdateSiteSettingsCommand(
     string AvailabilityStatus,
     string CurrentLocation,
     string CvUrl,
+    string WhatsAppNumber,
+    string HeroCodeTitle,
+    string HeroCodeSnippet,
+    string HeroBadgesJson,
     List<SocialLinkInputDto> SocialLinks
 ) : IRequest<ApiResponse<bool>>;
 
@@ -51,6 +55,10 @@ public class UpdateSiteSettingsCommandHandler : IRequestHandler<UpdateSiteSettin
         settings.AvailabilityStatus = request.AvailabilityStatus;
         settings.CurrentLocation = request.CurrentLocation;
         settings.CvUrl = request.CvUrl;
+        settings.WhatsAppNumber = string.IsNullOrWhiteSpace(request.WhatsAppNumber) ? "923000000000" : request.WhatsAppNumber;
+        settings.HeroCodeTitle = string.IsNullOrWhiteSpace(request.HeroCodeTitle) ? "ShahidPortfolio.sln - Clean Architecture" : request.HeroCodeTitle;
+        settings.HeroCodeSnippet = request.HeroCodeSnippet ?? string.Empty;
+        settings.HeroBadgesJson = string.IsNullOrWhiteSpace(request.HeroBadgesJson) ? "[]" : request.HeroBadgesJson;
 
         // Update social links
         var existingSocials = await _context.SocialLinks.ToListAsync(cancellationToken);

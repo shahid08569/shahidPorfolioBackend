@@ -15,6 +15,7 @@ public interface IApplicationDbContext
     DbSet<BlogPost> BlogPosts { get; }
     DbSet<ContactMessage> ContactMessages { get; }
     DbSet<SocialLink> SocialLinks { get; }
+    DbSet<Certificate> Certificates { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

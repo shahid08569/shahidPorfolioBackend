@@ -22,6 +22,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<BlogPost> BlogPosts => Set<BlogPost>();
     public DbSet<ContactMessage> ContactMessages => Set<ContactMessage>();
     public DbSet<SocialLink> SocialLinks => Set<SocialLink>();
+    public DbSet<Certificate> Certificates => Set<Certificate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

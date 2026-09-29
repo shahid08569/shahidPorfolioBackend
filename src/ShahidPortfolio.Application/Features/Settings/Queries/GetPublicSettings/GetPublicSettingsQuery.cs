@@ -43,6 +43,22 @@ public class GetPublicSettingsQueryHandler : IRequestHandler<GetPublicSettingsQu
             AvailabilityStatus = settings?.AvailabilityStatus ?? "Open to Work",
             CurrentLocation = settings?.CurrentLocation ?? "Pakistan",
             CvUrl = settings?.CvUrl ?? "/uploads/Shahid_Hussain_CV.pdf",
+            WhatsAppNumber = settings?.WhatsAppNumber ?? "923000000000",
+            HeroCodeTitle = settings?.HeroCodeTitle ?? "ShahidPortfolio.sln - Clean Architecture",
+            HeroCodeSnippet = settings?.HeroCodeSnippet ?? @"public class SolutionArchitect
+{
+    public string Name => ""Shahid Hussain"";
+    public string[] CoreStack => new[]
+    {
+        "".NET 10 / C#"",
+        ""ASP.NET Core Web API"",
+        ""Clean Architecture & CQRS"",
+        ""Angular 22 (SSR)"",
+        ""SQL Server & EF Core""
+    };
+    public bool DeliverCleanCode() => true;
+}",
+            HeroBadgesJson = settings?.HeroBadgesJson ?? @"[""Clean Architecture"", ""CQRS / MediatR"", ""Angular 22 Signals""]",
             SocialLinks = socials
         };
 

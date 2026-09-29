@@ -9,6 +9,10 @@ public class PublicSettingsDto
     public string AvailabilityStatus { get; set; } = string.Empty;
     public string CurrentLocation { get; set; } = string.Empty;
     public string CvUrl { get; set; } = string.Empty;
+    public string WhatsAppNumber { get; set; } = string.Empty;
+    public string HeroCodeTitle { get; set; } = string.Empty;
+    public string HeroCodeSnippet { get; set; } = string.Empty;
+    public string HeroBadgesJson { get; set; } = string.Empty;
     public List<SocialLinkDto> SocialLinks { get; set; } = new();
 }
 

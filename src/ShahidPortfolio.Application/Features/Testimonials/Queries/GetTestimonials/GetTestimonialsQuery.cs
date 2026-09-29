@@ -20,8 +20,9 @@ public class GetTestimonialsQueryHandler : IRequestHandler<GetTestimonialsQuery,
     {
         var testimonials = await _context.Testimonials
             .AsNoTracking()
-            .Where(t => t.IsActive)
+            .Where(t => t.IsActive && t.IsApproved)
             .OrderBy(t => t.DisplayOrder)
+            .ThenByDescending(t => t.SubmittedAtUtc)
             .Select(t => new TestimonialDto
             {
                 Id = t.Id,
@@ -30,7 +31,13 @@ public class GetTestimonialsQueryHandler : IRequestHandler<GetTestimonialsQuery,
                 Company = t.Company,
                 AvatarUrl = t.AvatarUrl,
                 Content = t.Content,
-                LinkedInUrl = t.LinkedInUrl
+                LinkedInUrl = t.LinkedInUrl,
+                Rating = t.Rating,
+                Relationship = t.Relationship,
+                IsApproved = t.IsApproved,
+                IsActive = t.IsActive,
+                DisplayOrder = t.DisplayOrder,
+                SubmittedAtUtc = t.SubmittedAtUtc
             })
             .ToListAsync(cancellationToken);
 

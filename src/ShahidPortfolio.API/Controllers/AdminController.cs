@@ -163,4 +163,90 @@ public class AdminController : BaseApiController
         if (!result.Success) return BadRequest(result);
         return Ok(result);
     }
+
+    // ==========================================
+    // TESTIMONIALS & ENDORSEMENTS MANAGEMENT
+    // ==========================================
+    [HttpGet("testimonials")]
+    public async Task<IActionResult> GetAllTestimonials(CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new ShahidPortfolio.Application.Features.Testimonials.Commands.GetAdminTestimonialsQuery(), cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpPut("testimonials/{id:guid}/approve")]
+    public async Task<IActionResult> ApproveTestimonial(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new ShahidPortfolio.Application.Features.Testimonials.Commands.ApproveTestimonialCommand(id), cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPut("testimonials/{id:guid}/reject")]
+    public async Task<IActionResult> RejectTestimonial(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new ShahidPortfolio.Application.Features.Testimonials.Commands.RejectTestimonialCommand(id), cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPost("testimonials")]
+    public async Task<IActionResult> CreateTestimonial([FromBody] ShahidPortfolio.Application.Features.Testimonials.Commands.CreateAdminTestimonialCommand command, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(command, cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPut("testimonials/{id:guid}")]
+    public async Task<IActionResult> UpdateTestimonial(Guid id, [FromBody] ShahidPortfolio.Application.Features.Testimonials.Commands.UpdateAdminTestimonialCommand command, CancellationToken cancellationToken)
+    {
+        if (id != command.Id) return BadRequest(ApiResponse<bool>.Fail("ID mismatch."));
+        var result = await Mediator.Send(command, cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpDelete("testimonials/{id:guid}")]
+    public async Task<IActionResult> DeleteTestimonial(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new ShahidPortfolio.Application.Features.Testimonials.Commands.DeleteTestimonialCommand(id), cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    // ==========================================
+    // CERTIFICATES MANAGEMENT
+    // ==========================================
+    [HttpGet("certificates")]
+    public async Task<IActionResult> GetAllCertificates(CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new ShahidPortfolio.Application.Features.Certificates.Queries.GetCertificatesQuery(IncludeInactive: true), cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpPost("certificates")]
+    public async Task<IActionResult> CreateCertificate([FromBody] ShahidPortfolio.Application.Features.Certificates.Commands.CreateCertificateCommand command, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(command, cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPut("certificates/{id:guid}")]
+    public async Task<IActionResult> UpdateCertificate(Guid id, [FromBody] ShahidPortfolio.Application.Features.Certificates.Commands.UpdateCertificateCommand command, CancellationToken cancellationToken)
+    {
+        if (id != command.Id) return BadRequest(ApiResponse<bool>.Fail("ID mismatch."));
+        var result = await Mediator.Send(command, cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpDelete("certificates/{id:guid}")]
+    public async Task<IActionResult> DeleteCertificate(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new ShahidPortfolio.Application.Features.Certificates.Commands.DeleteCertificateCommand(id), cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
 }
