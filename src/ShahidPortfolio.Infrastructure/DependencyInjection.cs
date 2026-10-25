@@ -15,8 +15,12 @@ public static class DependencyInjection
             ?? "Server=.\\SQLEXPRESS;Database=ShahidPortfolioDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;";
 
         services.AddDbContext<ApplicationDbContext>(options =>
+        {
             options.UseSqlServer(connectionString, b =>
-                b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+            options.ConfigureWarnings(w =>
+                w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+        });
 
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
