@@ -34,7 +34,9 @@ public class GlobalExceptionHandlerMiddleware
     {
         context.Response.ContentType = "application/json";
 
-        var errorMessage = $"{exception.Message} | StackTrace: {exception.StackTrace}";
+        var errorMessage = _env.IsDevelopment()
+            ? exception.GetBaseException().Message
+            : "An unexpected error occurred. Please try again later.";
 
         var response = exception switch
         {
