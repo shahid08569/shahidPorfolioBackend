@@ -70,6 +70,15 @@ builder.Services.AddCors(options =>
                 }
             }
 
+            // Allow Vercel preview and production domains
+            if (Uri.TryCreate(origin, UriKind.Absolute, out var reqUri))
+            {
+                if (reqUri.Host.EndsWith("vercel.app", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
             // In Production, match configured allowed origins
             return allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase);
         })
@@ -200,14 +209,12 @@ using (var scope = app.Services.CreateScope())
 }
 
 // 9. Configure HTTP pipeline
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shahid Portfolio API v1");
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shahid Portfolio API v1");
+    c.RoutePrefix = "swagger";
+});
 
 app.UseRateLimiter();
 
