@@ -9,11 +9,13 @@ public class GlobalExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
+    private readonly IHostEnvironment _env;
 
-    public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
+    public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger, IHostEnvironment env)
     {
         _next = next;
         _logger = logger;
+        _env = env;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -31,6 +33,10 @@ public class GlobalExceptionHandlerMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
+
+        var errorMessage = _env.IsDevelopment()
+            ? exception.GetBaseException().Message
+            : "An unexpected error occurred. Please try again later.";
 
         var response = exception switch
         {
@@ -52,7 +58,7 @@ public class GlobalExceptionHandlerMiddleware
             _ => new
             {
                 StatusCode = (int)HttpStatusCode.InternalServerError,
-                Body = ApiResponse<object>.Fail("An unexpected error occurred. Please try again later.", null, (int)HttpStatusCode.InternalServerError)
+                Body = ApiResponse<object>.Fail(errorMessage, null, (int)HttpStatusCode.InternalServerError)
             }
         };
 

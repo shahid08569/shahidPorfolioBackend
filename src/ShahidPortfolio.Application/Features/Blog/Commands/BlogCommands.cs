@@ -25,7 +25,7 @@ public class CreateBlogPostCommandValidator : AbstractValidator<CreateBlogPostCo
     {
         RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
         RuleFor(x => x.Slug).NotEmpty().MaximumLength(200);
-        RuleFor(x => x.Summary).NotEmpty().MaximumLength(500);
+        RuleFor(x => x.Summary).NotEmpty().MaximumLength(2000);
         RuleFor(x => x.ContentMarkdown).NotEmpty();
     }
 }

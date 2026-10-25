@@ -13,6 +13,9 @@ public class PublicSettingsDto
     public string HeroCodeTitle { get; set; } = string.Empty;
     public string HeroCodeSnippet { get; set; } = string.Empty;
     public string HeroBadgesJson { get; set; } = string.Empty;
+    public string ProfilePhotoUrl { get; set; } = string.Empty;
+    public string? HeroImageUrl { get; set; }
+    public string HeroHeadlinesJson { get; set; } = string.Empty;
     public List<SocialLinkDto> SocialLinks { get; set; } = new();
 }
 

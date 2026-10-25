@@ -16,7 +16,7 @@ public record CreateProjectCommand(
     string? ArchitectureOverview,
     string? KeyMetrics,
     string? LessonsLearned,
-    string ThumbnailUrl,
+    string? ThumbnailUrl,
     string? BannerUrl,
     string? LiveUrl,
     string? GithubUrl,
@@ -30,9 +30,9 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
 {
     public CreateProjectCommandValidator()
     {
-        RuleFor(x => x.Title).NotEmpty().MaximumLength(150);
-        RuleFor(x => x.Slug).NotEmpty().MaximumLength(160);
-        RuleFor(x => x.Summary).NotEmpty().MaximumLength(500);
+        RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
+        RuleFor(x => x.Slug).NotEmpty().MaximumLength(200);
+        RuleFor(x => x.Summary).NotEmpty().MaximumLength(2000);
     }
 }
 
@@ -65,7 +65,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             ArchitectureOverview = request.ArchitectureOverview,
             KeyMetrics = request.KeyMetrics,
             LessonsLearned = request.LessonsLearned,
-            ThumbnailUrl = request.ThumbnailUrl,
+            ThumbnailUrl = request.ThumbnailUrl ?? string.Empty,
             BannerUrl = request.BannerUrl,
             LiveUrl = request.LiveUrl,
             GithubUrl = request.GithubUrl,

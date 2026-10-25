@@ -38,5 +38,11 @@ public class SiteSettingsConfiguration : IEntityTypeConfiguration<SiteSettings>
         builder.Property(s => s.CvUrl)
             .HasMaxLength(500)
             .IsRequired();
+
+        builder.Property(s => s.ProfilePhotoUrl)
+            .HasMaxLength(500);
+
+        builder.Property(s => s.HeroImageUrl)
+            .HasMaxLength(500);
     }
 }

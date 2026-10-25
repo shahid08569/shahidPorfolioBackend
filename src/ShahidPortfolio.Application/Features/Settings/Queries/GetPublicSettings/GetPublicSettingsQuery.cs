@@ -59,6 +59,9 @@ public class GetPublicSettingsQueryHandler : IRequestHandler<GetPublicSettingsQu
     public bool DeliverCleanCode() => true;
 }",
             HeroBadgesJson = settings?.HeroBadgesJson ?? @"[""Clean Architecture"", ""CQRS / MediatR"", ""Angular 22 Signals""]",
+            ProfilePhotoUrl = settings?.ProfilePhotoUrl ?? "/uploads/Shahid_Profile.jpg",
+            HeroImageUrl = settings?.HeroImageUrl,
+            HeroHeadlinesJson = settings?.HeroHeadlinesJson ?? @"[""Building Enterprise-Grade .NET & Angular Solutions"", ""Architecting Scalable Clean Architecture & CQRS Systems"", ""Engineering Resilient Cloud-Ready Microservices""]",
             SocialLinks = socials
         };
 

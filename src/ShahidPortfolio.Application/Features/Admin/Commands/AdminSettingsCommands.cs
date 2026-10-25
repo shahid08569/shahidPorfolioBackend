@@ -19,6 +19,9 @@ public record UpdateSiteSettingsCommand(
     string HeroCodeTitle,
     string HeroCodeSnippet,
     string HeroBadgesJson,
+    string? ProfilePhotoUrl = null,
+    string? HeroImageUrl = null,
+    string? HeroHeadlinesJson = null,
     List<SocialLinkInputDto>? SocialLinks = null
 ) : IRequest<ApiResponse<bool>>;
 
@@ -59,6 +62,15 @@ public class UpdateSiteSettingsCommandHandler : IRequestHandler<UpdateSiteSettin
         settings.HeroCodeTitle = string.IsNullOrWhiteSpace(request.HeroCodeTitle) ? "ShahidPortfolio.sln - Clean Architecture" : request.HeroCodeTitle;
         settings.HeroCodeSnippet = request.HeroCodeSnippet ?? string.Empty;
         settings.HeroBadgesJson = string.IsNullOrWhiteSpace(request.HeroBadgesJson) ? "[]" : request.HeroBadgesJson;
+        if (!string.IsNullOrWhiteSpace(request.ProfilePhotoUrl))
+        {
+            settings.ProfilePhotoUrl = request.ProfilePhotoUrl;
+        }
+        settings.HeroImageUrl = request.HeroImageUrl;
+        if (!string.IsNullOrWhiteSpace(request.HeroHeadlinesJson))
+        {
+            settings.HeroHeadlinesJson = request.HeroHeadlinesJson;
+        }
 
         // Update social links if provided
         if (request.SocialLinks != null)

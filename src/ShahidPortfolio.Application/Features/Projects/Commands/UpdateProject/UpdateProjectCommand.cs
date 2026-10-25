@@ -16,7 +16,7 @@ public record UpdateProjectCommand(
     string? ArchitectureOverview,
     string? KeyMetrics,
     string? LessonsLearned,
-    string ThumbnailUrl,
+    string? ThumbnailUrl,
     string? BannerUrl,
     string? LiveUrl,
     string? GithubUrl,
@@ -31,9 +31,9 @@ public class UpdateProjectCommandValidator : AbstractValidator<UpdateProjectComm
     public UpdateProjectCommandValidator()
     {
         RuleFor(x => x.Id).NotEmpty();
-        RuleFor(x => x.Title).NotEmpty().MaximumLength(150);
-        RuleFor(x => x.Slug).NotEmpty().MaximumLength(160);
-        RuleFor(x => x.Summary).NotEmpty().MaximumLength(500);
+        RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
+        RuleFor(x => x.Slug).NotEmpty().MaximumLength(200);
+        RuleFor(x => x.Summary).NotEmpty().MaximumLength(2000);
     }
 }
 
@@ -70,7 +70,7 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
         project.ArchitectureOverview = request.ArchitectureOverview;
         project.KeyMetrics = request.KeyMetrics;
         project.LessonsLearned = request.LessonsLearned;
-        project.ThumbnailUrl = request.ThumbnailUrl;
+        project.ThumbnailUrl = request.ThumbnailUrl ?? project.ThumbnailUrl;
         project.BannerUrl = request.BannerUrl;
         project.LiveUrl = request.LiveUrl;
         project.GithubUrl = request.GithubUrl;

@@ -135,12 +135,49 @@ app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 app.UseCors("DefaultCorsPolicy");
 
 // 8. Static files (for wwwroot/uploads: CV and uploaded images)
-var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "uploads");
+var candidateUploads = new[]
+{
+    Path.Combine(app.Environment.ContentRootPath, "wwwroot", "uploads"),
+    Path.Combine(Directory.GetCurrentDirectory(), "src", "ShahidPortfolio.API", "wwwroot", "uploads"),
+    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")
+};
+
+var uploadsPath = candidateUploads.FirstOrDefault(Directory.Exists)
+    ?? Path.Combine(app.Environment.ContentRootPath, "wwwroot", "uploads");
+
 if (!Directory.Exists(uploadsPath))
 {
     Directory.CreateDirectory(uploadsPath);
 }
+
+// Sync CV file between candidate directories if exists
+foreach (var cand in candidateUploads)
+{
+    if (cand != uploadsPath && Directory.Exists(cand))
+    {
+        var srcCv = Path.Combine(cand, "Shahid_Hussain_CV.pdf");
+        var destCv = Path.Combine(uploadsPath, "Shahid_Hussain_CV.pdf");
+        if (File.Exists(srcCv) && !File.Exists(destCv))
+        {
+            try { File.Copy(srcCv, destCv, true); } catch { }
+        }
+    }
+}
+
 app.UseStaticFiles();
+
+try
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadsPath),
+        RequestPath = "/uploads"
+    });
+}
+catch (Exception)
+{
+    // Ignore if already mapped or duplicate
+}
 
 // 8. Automatically apply migrations & seed database at startup
 using (var scope = app.Services.CreateScope())

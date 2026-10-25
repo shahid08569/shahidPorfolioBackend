@@ -24,7 +24,7 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .IsUnique();
 
         builder.Property(p => p.Summary)
-            .HasMaxLength(350)
+            .HasMaxLength(2000)
             .IsRequired();
 
         builder.Property(p => p.ThumbnailUrl)

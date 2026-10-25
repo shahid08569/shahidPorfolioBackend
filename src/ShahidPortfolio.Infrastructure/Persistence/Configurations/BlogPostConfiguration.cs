@@ -24,7 +24,7 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
             .IsUnique();
 
         builder.Property(b => b.Summary)
-            .HasMaxLength(400)
+            .HasMaxLength(2000)
             .IsRequired();
 
         builder.Property(b => b.ContentMarkdown)
