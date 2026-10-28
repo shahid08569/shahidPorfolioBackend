@@ -100,6 +100,34 @@ public class AdminController : BaseApiController
     }
 
     // ==========================================
+    // EDUCATIONS MANAGEMENT
+    // ==========================================
+    [HttpPost("educations")]
+    public async Task<IActionResult> CreateEducation([FromBody] CreateEducationCommand command, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(command, cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPut("educations/{id:guid}")]
+    public async Task<IActionResult> UpdateEducation(Guid id, [FromBody] UpdateEducationCommand command, CancellationToken cancellationToken)
+    {
+        if (id != command.Id) return BadRequest(ApiResponse<bool>.Fail("ID mismatch."));
+        var result = await Mediator.Send(command, cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpDelete("educations/{id:guid}")]
+    public async Task<IActionResult> DeleteEducation(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await Mediator.Send(new DeleteEducationCommand(id), cancellationToken);
+        if (!result.Success) return BadRequest(result);
+        return Ok(result);
+    }
+
+    // ==========================================
     // BLOG MANAGEMENT
     // ==========================================
     [HttpPost("blog")]
