@@ -29,6 +29,6 @@ public class SiteSettings : BaseEntity
     public string HeroBadgesJson { get; set; } = @"[""Clean Architecture"", ""CQRS / MediatR"", ""Angular 22 Signals""]";
     public string ProfilePhotoUrl { get; set; } = "/uploads/Shahid_Profile.jpg";
     public string? HeroImageUrl { get; set; }
-    public string HeroHeadlinesJson { get; set; } = @"[""Building Enterprise-Grade .NET & Angular Solutions"", ""Architecting Scalable Clean Architecture & CQRS Systems"", ""Engineering Resilient Cloud-Ready Microservices""]";
+    public string HeroHeadlinesJson { get; set; } = @"[""Building Scalable .NET & Angular Solutions"", ""Clean Architecture & CQRS Systems"", ""Engineering Cloud-Ready Microservices"", ""Full-Stack Engineer Specializing in APIs""]";
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;
 }
